@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trang Nhận File</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Trang Nhận File</h1>
+
+        <ul class="nav">
+            <li><a href="/">Trang Gửi</a></li>
+            <li><a href="/receive_file">Trang Nhận</a></li>
+        </ul>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <ul class="flashes">
+                {% for category, message in messages %}
+                    <li class="{{ category }}">{{ message }}</li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+
+        <p>Đây là điểm cuối (endpoint) để nhận các file có chữ ký số. Bạn có thể gửi file đến URL này: <strong>http://localhost:5000/receive_file</strong> (hoặc địa chỉ IP của máy bạn nếu chạy trên máy chủ)</p>
+
+        <h2>Các File Đã Nhận</h2>
+        {% if received_files %}
+            <ul class="file-list">
+                {% for file in received_files %}
+                    <li>
+                        {{ file }} 
+                        <a href="{{ url_for('download_file', filename=file) }}" class="btn-download">Tải xuống</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>Chưa có file nào được nhận.</p>
+        {% endif %}
+    </div>
+</body>
+</html>

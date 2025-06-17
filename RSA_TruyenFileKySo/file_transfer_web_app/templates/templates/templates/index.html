@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gửi File Có Ký Số</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Gửi File Có Ký Số</h1>
+
+        <ul class="nav">
+            <li><a href="/">Trang Gửi</a></li>
+            <li><a href="/receive_file">Trang Nhận</a></li>
+        </ul>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <ul class="flashes">
+                {% for category, message in messages %}
+                    <li class="{{ category }}">{{ message }}</li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+
+        <form action="/send_file" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="file">Chọn File để Gửi:</label>
+                <input type="file" id="file" name="file" required>
+            </div>
+            <div class="form-group">
+                <label for="receiver_url">Địa chỉ URL của Máy Nhận (ví dụ: http://localhost:5000/receive_file):</label>
+                <input type="text" id="receiver_url" name="receiver_url" placeholder="http://127.0.0.1:5000/receive_file" required>
+            </div>
+            <button type="submit" class="btn">Gửi File</button>
+        </form>
+
+        <p class="note">
+            Lưu ý: Bạn cần chạy `generate_keys.py` trước để tạo file khóa (private_key.pem và public_key.pem) trong cùng thư mục với `app.py`.<br>
+            Khóa công khai (public_key.pem) sẽ được gửi kèm theo file và chữ ký để bên nhận có thể xác minh.
+        </p>
+    </div>
+</body>
+</html>
